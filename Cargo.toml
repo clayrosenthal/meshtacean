@@ -1,8 +1,15 @@
 [package]
 name = "meshtacean"
 version = "0.1.0"
+authors = ["Clay Rosenthal <rust@mail.clayrosenthal.me>"]
 edition = "2021"
 license = "GPL-3.0-or-later"
 keywords = ["meshtastic", "mesh", "lora", "hardware"]
+categories = ["command-line-interface", "hardware-support"]
 
 [dependencies]
+prost = "0.13.4"
+
+[build-dependencies]
+prost-build = "0.13.4"
+protoc-bin-vendored = "3.1.0"
