@@ -14,7 +14,7 @@ repos:
     -   id: rustfmt
         name: Format Rust code
         description: Check if all files follow the rustfmt style
-        entry: cargo fmt --all -- --check --color always
+        entry: cargo fmt --all -- --color always
         language: system
         pass_filenames: false
     -   id: cargobuild

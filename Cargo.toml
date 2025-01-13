@@ -4,10 +4,14 @@ version = "0.1.0"
 authors = ["Clay Rosenthal <rust@mail.clayrosenthal.me>"]
 edition = "2021"
 license = "GPL-3.0-or-later"
+repository = "https://github.com/clayrosenthal/meshtacean"
+description = "A CLI for the Meshtastic Client API"
+readme = "README.md"
 keywords = ["meshtastic", "mesh", "lora", "hardware"]
 categories = ["command-line-interface", "hardware-support"]
 
 [dependencies]
+clap = { version = "4.5.26", features = ["derive"] }
 prost = "0.13.4"
 
 [build-dependencies]
