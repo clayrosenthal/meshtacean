@@ -9,10 +9,24 @@ description = "A CLI for the Meshtastic Client API"
 readme = "README.md"
 keywords = ["meshtastic", "mesh", "lora", "hardware"]
 categories = ["command-line-interface", "hardware-support"]
+include = [
+    "build.rs",
+    "src/**/*",
+    "src/*",
+    "protobufs/*",
+    "Cargo.toml",
+    "LICENSE",
+    "README.md",
+]
+
+[features]
+gen = ["dep:prost-build"]
 
 [dependencies]
 clap = { version = "4.5.26", features = ["derive"] }
 prost = "0.13.4"
+prost-types = "0.13.4"
+
 
 [build-dependencies]
-prost-build = "0.13.4"
+prost-build = { version = "0.13.4", optional = true }

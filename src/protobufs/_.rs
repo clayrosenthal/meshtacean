@@ -17,15 +17,10 @@ pub struct NanoPbOptions {
     pub max_count: ::core::option::Option<i32>,
     /// Size of integer fields. Can save some memory if you don't need
     /// full 32 bits for the value.
-    #[prost(enumeration = "super::IntSize", optional, tag = "7", default = "IsDefault")]
+    #[prost(enumeration = "IntSize", optional, tag = "7", default = "IsDefault")]
     pub int_size: ::core::option::Option<i32>,
     /// Force type of field (callback or static allocation)
-    #[prost(
-        enumeration = "super::FieldType",
-        optional,
-        tag = "3",
-        default = "FtDefault"
-    )]
+    #[prost(enumeration = "FieldType", optional, tag = "3", default = "FtDefault")]
     pub r#type: ::core::option::Option<i32>,
     /// Use long names for enums, i.e. EnumName_EnumValue.
     #[prost(bool, optional, tag = "4", default = "true")]
@@ -72,12 +67,7 @@ pub struct NanoPbOptions {
     pub submsg_callback: ::core::option::Option<bool>,
     /// Shorten or remove package names from type names.
     /// This option applies only on the file level.
-    #[prost(
-        enumeration = "super::TypenameMangling",
-        optional,
-        tag = "17",
-        default = "MNone"
-    )]
+    #[prost(enumeration = "TypenameMangling", optional, tag = "17", default = "MNone")]
     pub mangle_names: ::core::option::Option<i32>,
     /// Data type for storage associated with callback fields.
     #[prost(string, optional, tag = "18", default = "pb_callback_t")]
@@ -93,12 +83,7 @@ pub struct NanoPbOptions {
     /// for the whole message, not per-field. Usually automatic selection is
     /// ok, but if it results in compilation errors you can increase the field
     /// size here.
-    #[prost(
-        enumeration = "super::DescriptorSize",
-        optional,
-        tag = "20",
-        default = "DsAuto"
-    )]
+    #[prost(enumeration = "DescriptorSize", optional, tag = "20", default = "DsAuto")]
     pub descriptorsize: ::core::option::Option<i32>,
     /// Set default value for has_ fields.
     #[prost(bool, optional, tag = "23", default = "false")]
@@ -129,12 +114,7 @@ pub struct NanoPbOptions {
     /// A field that can become a static member of a c struct (e.g. int, bool, etc)
     /// will be a a static field.
     /// Fields with dynamic length are converted to either a pointer or a callback.
-    #[prost(
-        enumeration = "super::FieldType",
-        optional,
-        tag = "29",
-        default = "FtCallback"
-    )]
+    #[prost(enumeration = "FieldType", optional, tag = "29", default = "FtCallback")]
     pub fallback_type: ::core::option::Option<i32>,
 }
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]

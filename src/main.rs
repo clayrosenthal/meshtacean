@@ -2,6 +2,19 @@
 // Install with cargo: "cargo install meshtacean"
 
 use clap::{ArgAction, Args, Parser, Subcommand};
+use std::error::Error;
+
+#[path = "client/mesh_client.rs"]
+pub mod client;
+
+pub mod node;
+
+pub mod utils;
+
+pub mod protobufs {
+    include!("protobufs/meshtastic.rs");
+    // include!("protobufs/nanopb.rs");
+}
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
@@ -17,7 +30,7 @@ struct Cli {
 }
 
 #[derive(Args, Debug)]
-#[group(id = "connection", required = true, multiple = false)]
+#[group(required = false, multiple = false)]
 struct ConnectionArgs {
     #[command(flatten)]
     bluetooth: BluetoothArgs,
@@ -30,31 +43,34 @@ struct ConnectionArgs {
 }
 
 #[derive(Args, Debug)]
-#[group(id = "bluetooth", required = false, multiple = false)]
+#[group(required = false, multiple = false)]
 struct BluetoothArgs {
     #[arg(
         short,
         long,
         help = "Connect to a bluetooth device, by address or name"
     )]
-    bluetooth: String,
+    bluetooth: Option<String>,
 
     #[arg(long, help = "Scan for bluetooth devices")]
     scan: bool,
 }
 
 #[derive(Args, Debug)]
-#[group(id = "serial", required = false, multiple = false)]
+#[group(required = false, multiple = false)]
 struct SerialArgs {
-    #[arg(short, long, help = "Port of device to connect to using serial")]
-    port: String,
+    #[arg(long, help = "Port of device to connect to using serial")]
+    port: Option<String>,
 }
 
 #[derive(Args, Debug)]
-#[group(id = "tcp", required = false, multiple = false)]
+#[group(required = false, multiple = false)]
 struct TcpArgs {
-    #[arg(short, long, help = "Connect to device using TCP")]
-    host: String,
+    #[arg(long, help = "Connect to device using TCP")]
+    host: Option<String>,
+
+    #[arg(long, help = "Port of device to connect to using TCP")]
+    port: Option<u16>,
 }
 
 #[derive(Args, Debug)]
@@ -90,6 +106,32 @@ enum Commands {
 fn valid_config_key(s: &str) -> Result<String, String> {
     //TODO validate config key
     Ok(s.to_string())
+}
+
+fn connect(args: &ConnectionArgs) -> Result<Box<dyn client::MeshClient>, Box<dyn Error>> {
+    if args.bluetooth.scan {
+        //TODO scan for bluetooth devices
+        utils::todo()?;
+    } else if let Some(_bluetooth) = &args.bluetooth.bluetooth {
+        //TODO connect to bluetooth device
+        // let client = client::bluetooth_client::BluetoothClient::new(bluetooth);
+
+        utils::todo()?;
+    }
+
+    if let Some(_port) = &args.serial.port {
+        //TODO connect to serial device
+        utils::todo()?;
+    }
+
+    if let Some(_host) = &args.tcp.host {
+        //TODO connect to tcp device
+        utils::todo()?;
+    }
+
+    // No connection method provided, try localhost
+    let client = client::tcp_client::TcpClient::default();
+    Ok(Box::new(client))
 }
 
 fn main() {

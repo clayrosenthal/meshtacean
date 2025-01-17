@@ -1,11 +1,19 @@
-use prost_build::Config;
-use std::path::PathBuf;
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    #[cfg(feature = "gen")]
+    {
+        if let Err(e) = generate_protobuf_files() {
+            println!("Error generating protobuf files: {}", e);
+        }
+    }
+    Ok(())
+}
 
+#[cfg(feature = "gen")]
 fn generate_protobuf_files() -> Result<(), Box<dyn std::error::Error>> {
     // Get the manifest directory (where Cargo.toml is located)
-    let manifest_dir = PathBuf::new();
+    let manifest_dir = std::path::PathBuf::new();
     let proto_dir = manifest_dir.join("protobufs").join("meshtastic");
-    let out_dir = manifest_dir.join("src").join("protobuf");
+    let out_dir = manifest_dir.join("src").join("protobufs");
 
     // Verify the directory exists
     if !proto_dir.exists() {
@@ -33,33 +41,28 @@ fn generate_protobuf_files() -> Result<(), Box<dyn std::error::Error>> {
                 .map(|ext| ext == "proto")
                 .unwrap_or(false)
         })
+        .filter(|entry| entry.path().file_name().unwrap().to_str().unwrap() != "nanopb.proto")
         .map(|entry| entry.path())
-        .collect::<Vec<PathBuf>>();
+        .collect::<Vec<std::path::PathBuf>>();
 
-    let mut config = Config::new();
+    let mut config = prost_build::Config::new();
     let mut proto_fd_set = config.load_fds(
         &proto_files,
         &[proto_dir.parent().unwrap().to_path_buf(), proto_dir],
     )?;
 
-    for file in &mut proto_fd_set.file {
-        if file.name() == "nanopb.proto" {
-            file.package = Some("nanopb".to_string());
-        }
-    }
+    // for file in &mut proto_fd_set.file {
+    //     if file.name() == "nanopb.proto" {
+    //         file.package = Some("meshtastic".to_string());
+    //     }
+    // }
 
     config.out_dir(out_dir);
     config.compile_fds(proto_fd_set).unwrap();
 
     // Tell Cargo to rerun this script if any proto files change
     println!("cargo:rerun-if-changed=protobufs/meshtastic");
+    println!("cargo:rerun-if-changed=protobufs/nanopb.proto");
 
-    Ok(())
-}
-
-fn main() -> Result<(), Box<dyn std::error::Error>> {
-    if let Err(e) = generate_protobuf_files() {
-        println!("Error generating protobuf files: {}", e);
-    }
     Ok(())
 }

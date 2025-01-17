@@ -243,6 +243,7 @@ dependencies = [
  "clap",
  "prost",
  "prost-build",
+ "prost-types",
 ]
 
 [[package]]
