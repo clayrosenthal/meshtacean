@@ -5,20 +5,32 @@ repos:
     rev: v5.0.0
     hooks:
     -   id: trailing-whitespace
+        name: 🔳 Fix trailing whitespace
     -   id: end-of-file-fixer
+        name: ↩️  Fix end of file
     -   id: check-yaml
+        name: 🖖 Check YAML
     -   id: check-toml
+        name: 🫳 Check TOML
     -   id: check-added-large-files
+        name: 🍨 Check for large files
 -   repo: local
     hooks:
     -   id: rustfmt
-        name: Format Rust code
+        name: 🧹 Format Rust code
         description: Check if all files follow the rustfmt style
         entry: cargo fmt --all -- --color always
         language: system
         pass_filenames: false
+    -   id: cargoclippy
+        name: 📎 Hi I'm Clippy
+        description: Run Clippy to give us some hints
+        entry: cargo clippy -- -D warnings
+        language: system
+        pass_filenames: false
+        files: \.rs$
     -   id: cargobuild
-        name: Build Rust code
+        name: 🛠️ Build Rust code
         description: Build the Rust code
         entry: cargo build
         language: system
