@@ -1,10 +1,11 @@
 #![allow(unused_variables)]
 
 use std::time::Duration;
+
+use thiserror::Error;
+
 // Import protos (assuming they're generated)
-use crate::protobufs::{
-    AdminMessage, Channel, ChannelSet, LocalConfig, LocalModuleConfig, PortNum, Position,
-};
+use crate::protobufs::{AdminMessage, Channel, LocalConfig, LocalModuleConfig};
 
 use crate::client::MeshClient;
 
@@ -108,8 +109,6 @@ impl Node {
         Ok(())
     }
 
-    // ... Additional public methods matching Python implementation ...
-
     // Private helper methods
     fn fixup_channels(&mut self) {
         // Todo: Implement
@@ -136,9 +135,12 @@ impl Node {
 }
 
 // Error type for Node operations
-#[derive(Debug)]
+#[derive(Debug, Error)]
 pub enum NodeError {
+    #[error("No config found")]
     ConfigNotFound,
-    InvalidChannel,
+    #[error("Invalid channel used {0}")]
+    InvalidChannel(u32),
+    #[error("Network error")]
     NetworkError,
 }

@@ -13,16 +13,25 @@ pub mod utils;
 
 pub mod protobufs {
     include!("protobufs/meshtastic.rs");
-    // include!("protobufs/nanopb.rs");
 }
 
+use client::serial_client::SerialClient;
+use client::tcp_client::TcpClient;
+use client::MeshClient;
+/// CLI for the Meshtastic Client API
+///
+/// # Examples
+///
+/// ```bash
+/// meshtacean --port /dev/ttyUSB0
+/// ```
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 struct Cli {
     #[arg(short, long, action = ArgAction::Count)]
     verbose: u8,
 
-    #[command(flatten)]
+    #[command(flatten, help = "Connection options")]
     connection: ConnectionArgs,
 
     #[command(subcommand)]
@@ -31,7 +40,7 @@ struct Cli {
 
 #[derive(Args, Debug)]
 #[group(required = false, multiple = false)]
-struct ConnectionArgs {
+pub struct ConnectionArgs {
     #[command(flatten)]
     bluetooth: BluetoothArgs,
 
@@ -59,8 +68,8 @@ struct BluetoothArgs {
 #[derive(Args, Debug)]
 #[group(required = false, multiple = false)]
 struct SerialArgs {
-    #[arg(long, help = "Port of device to connect to using serial")]
-    port: Option<String>,
+    #[arg(short, long, help = "Path of device to connect to using serial")]
+    serial: Option<String>,
 }
 
 #[derive(Args, Debug)]
@@ -91,6 +100,7 @@ struct LocalArgs {
     nodes: bool,
 }
 
+/// Sub commands for the CLI
 #[derive(Subcommand, Debug)]
 enum Commands {
     Connect(ConnectionArgs),
@@ -119,18 +129,20 @@ fn connect(args: &ConnectionArgs) -> Result<Box<dyn client::MeshClient>, Box<dyn
         utils::todo()?;
     }
 
-    if let Some(_port) = &args.serial.port {
-        //TODO connect to serial device
-        utils::todo()?;
+    if let Some(_serial) = &args.serial.serial {
+        let client = SerialClient::new(&args);
+        client.connect()?;
+        return Ok(Box::new(client));
     }
 
     if let Some(_host) = &args.tcp.host {
-        //TODO connect to tcp device
-        utils::todo()?;
+        let client = TcpClient::new(&args);
+        client.connect()?;
+        return Ok(Box::new(client));
     }
 
     // No connection method provided, try localhost
-    let client = client::tcp_client::TcpClient::default();
+    let client = TcpClient::default();
     Ok(Box::new(client))
 }
 

@@ -1,11 +1,7 @@
 // This is a Client that communicates with a meshtastic device over TCP
 
-use std::error::Error;
-use std::fmt;
-
 use crate::client::{MeshClient, MeshClientError};
 use crate::node::Node;
-use crate::utils;
 use crate::ConnectionArgs;
 
 const DEFAULT_TCP_PORT: u16 = 4403;
@@ -38,16 +34,16 @@ impl MeshClient for TcpClient {
         self.node.as_ref().unwrap()
     }
 
-    fn connect(&self) -> Result<(), Box<dyn std::error::Error>> {
-        utils::todo()
+    fn connect(&self) -> Result<(), MeshClientError> {
+        return Err(MeshClientError::ConnectionError);
     }
 
-    fn send(&self, message: &str) -> Result<(), Box<dyn std::error::Error>> {
-        utils::todo()
+    fn send(&self, message: &str) -> Result<(), MeshClientError> {
+        return Err(MeshClientError::SendError);
     }
 
-    fn receive(&self) -> Result<(), Box<dyn std::error::Error>> {
-        utils::todo()
+    fn receive(&self) -> Result<(), MeshClientError> {
+        return Err(MeshClientError::ReceiveError);
     }
 }
 

@@ -11,7 +11,7 @@ repos:
     -   id: check-yaml
         name: 🖖 Check YAML
     -   id: check-toml
-        name: 🫳 Check TOML
+        name: 🫳  Check TOML
     -   id: check-added-large-files
         name: 🍨 Check for large files
 -   repo: local
@@ -30,7 +30,7 @@ repos:
         pass_filenames: false
         files: \.rs$
     -   id: cargobuild
-        name: 🛠️ Build Rust code
+        name: 🛠️  Build Rust code
         description: Build the Rust code
         entry: cargo build
         language: system

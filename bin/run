@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+#
+# This script builds and runs the resulting binary
+
+cargo run -- "$@"
